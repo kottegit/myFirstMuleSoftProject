@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="21b3a095-c985-4469-ac4d-90ebf64b59b9" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="demo2appFlow" doc:id="03350ed3-1ad8-4b16-9028-14e4964f32a8" >
+		<http:listener doc:name="Listener" doc:id="c23ea760-1699-4594-8f70-e3d1da64d5a8" config-ref="HTTP_Listener_config" path="/demo2"/>
+		<logger level="INFO" doc:name="start Logger" doc:id="e5bbc473-51cb-45d5-95ca-9fb7cc0567bd" />
+		<ee:transform doc:name="Transform Message" doc:id="46dfe49e-1bf5-4239-a1a8-67b3d7135c96" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"code":200,
+	"message":"mule2 Application"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<http:request method="GET" doc:name="Request" doc:id="ca426e0d-0079-4634-b77e-25c1b70bc40c" url="https://dummy.restapiexample.com/api/v1/employees"/>
+		<logger level="INFO" doc:name="end Logger" doc:id="8834369b-88cd-47d6-bc99-10510126d3aa" />
+	</flow>
+</mule>
